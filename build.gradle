@@ -1,0 +1,74 @@
+apply plugin: "java"
+apply plugin: "maven"
+apply from: "gradle/dependencies.gradle"
+//apply from: "gradle/report.gradle"
+apply from: "gradle/assembler.gradle"
+apply from: "gradle/release.gradle"
+apply from: "gradle/sonar.gradle"
+
+sourceCompatibility = 1.8
+
+jar {
+    baseName = 'restHandler'
+    version = '0.1.0'
+}
+
+
+sourceSets {
+    intTest
+    
+    main {
+        java { srcDir 'src/main/java' }
+        resources { srcDir 'src/main/resources' }
+    }
+    test {
+        java { srcDir 'src/test/java' }
+        resources { srcDir 'src/test/resources' }
+    }
+}
+
+dependencies {
+
+    compile ("org.springframework:spring-core:${springVersion}")
+    compile ("org.springframework:spring-beans:${springVersion}")
+    compile ("org.springframework:spring-context:${springVersion}")
+    compile ("org.springframework:spring-orm:${springVersion}")
+    compile ("org.springframework:spring-tx:${springVersion}")
+    compile ("org.springframework:spring-aop:${springVersion}")
+
+    compile ("org.springframework:spring-aspects:${springVersion}")
+    compile ("org.springframework:spring-webmvc:${springVersion}")
+    compile ("org.springframework:spring-web:${springVersion}")
+    compile ("org.springframework.data:spring-data-jpa:${springDataJPAVersion}")
+      
+    compile ("org.springframework.hateoas:spring-hateoas:0.16.0.RELEASE")
+    compile ("com.sun.jersey:jersey-bundle:1.18")
+
+    compile("org.projectlombok:lombok:${lombokVersion}")
+    compile("com.google.guava:guava:${guavaVersion}")
+    compile("net.sf.ehcache:ehcache:2.8.0")
+    
+    compile("org.apache.httpcomponents:httpclient:${httpClientVersion}")
+    compile("org.apache.httpcomponents:fluent-hc:${httpClientVersion}")
+       
+  
+    compile("org.yaml:snakeyaml:${snakeYamlVersion}")
+    compile("pl.java.scalatech:serviceCommon:${serviceCommonVersion}")
+    
+    
+    testCompile("org.hamcrest:hamcrest-all:$hamcrestVersion")
+    compile("org.mockito:mockito-all:$mockitoVersion")
+    testCompile("junit:junit:$junitVersion")
+
+    testCompile("org.easytesting:fest-assert:${festAssertVersion}")
+    testCompile ("org.springframework:spring-test:${springVersion}")
+    testCompile ("org.spockframework:spock-core:0.7-groovy-2.0")
+
+}
+uploadArchives {
+    repositories {
+        flatDir { dirs 'repos' }
+    }
+}
+
+task wrapper(type: Wrapper) { }
