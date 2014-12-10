@@ -33,8 +33,11 @@ dependencies {
     
     
     compile("pl.java.scalatech:basicEntity:${basicEntityVersion}")
-    compile("pl.java.scalatech:serviceCommon:${serviceCommonVersion}")
- 
+    compile("pl.java.scalatech:basicEntity:${basicEntityVersion}:source")
+    compile("pl.java.scalatech:commonService:${serviceCommonVersion}")
+    compile("pl.java.scalatech:commonService:${serviceCommonVersion}:source")
+    
+    
     testCompile("org.hamcrest:hamcrest-all:$hamcrestVersion")
     compile("org.mockito:mockito-all:$mockitoVersion")
     testCompile("junit:junit:$junitVersion")

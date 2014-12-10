@@ -5,13 +5,9 @@ apply from: "gradle/dependencies.gradle"
 apply from: "gradle/assembler.gradle"
 apply from: "gradle/release.gradle"
 apply from: "gradle/sonar.gradle"
-
+apply from: "gradle/eclipse.gradle"
 sourceCompatibility = 1.8
 
-jar {
-    baseName = 'restHandler'
-    version = '0.1.1'
-}
 
 
 sourceSets {
