@@ -45,3 +45,18 @@ dependencies {
      
 
 }
+
+configurations {
+    all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        exclude group: "commons-logging"
+        exclude module: "slf4j-log4j12"
+        exclude module: "hibernate-jpa-2.0-api"
+    }
+     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.springframework') {
+            details.useVersion '4.1.0.RELEASE'
+        }
+    }
+    
+}
