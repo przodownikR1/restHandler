@@ -17,10 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.HateoasPageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.TemplateVariables;
+import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -32,9 +36,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
+
+import pl.java.scalatech.service.common.PaginationService;
 
 import pl.java.scalatech.entity.common.PKNature;
-import pl.java.scalatech.service.common.PaginationService;
 
 import com.google.common.base.Preconditions;
 
@@ -46,6 +54,9 @@ public abstract class CrudController<T extends PKNature<K>, K extends Serializab
 
     @Autowired
     protected MessageSource messageSource;
+    
+    @Autowired
+    private HateoasPageableHandlerMethodArgumentResolver pageableResolver;
 
     protected Locale locale = Locale.getDefault();
 
@@ -71,6 +82,7 @@ public abstract class CrudController<T extends PKNature<K>, K extends Serializab
         return getRightResponseEntity(item);
     }
 
+   
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<Void> createResource(@RequestBody T t) {
@@ -119,4 +131,12 @@ public abstract class CrudController<T extends PKNature<K>, K extends Serializab
     protected abstract ResponseEntity<?> getRightResponseEntity(T t);
 
     protected abstract ResourceAssemblerSupport<T, ?> getRas(T t);
+    
+    
+    protected Link createPaginatedResourceLink(Link link) {
+        String href = link.getHref();
+        UriComponents components = UriComponentsBuilder.fromUriString(href).build();
+        TemplateVariables variables = pageableResolver.getPaginationTemplateVariables(null, components);
+        return new Link(new UriTemplate(href, variables), link.getRel());
+    }
 }

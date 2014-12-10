@@ -1,4 +1,4 @@
-package pl.java.scalatech.rest;
+package pl.java.scalatech.rest.dto;
 
 import lombok.Getter;
 import lombok.NonNull;
