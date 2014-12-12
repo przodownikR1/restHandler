@@ -8,11 +8,6 @@ apply from: "gradle/sonar.gradle"
 
 sourceCompatibility = 1.8
 
-jar {
-    baseName = 'restHandler'
-    version = '0.1.1'
-}
-
 
 sourceSets {
     intTest
@@ -28,10 +23,5 @@ sourceSets {
 }
 
 
-uploadArchives {
-    repositories {
-        flatDir { dirs 'repos' }
-    }
-}
 
 task wrapper(type: Wrapper) { }

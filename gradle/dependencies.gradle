@@ -33,7 +33,7 @@ dependencies {
     
     
     compile("pl.java.scalatech:basicEntity:${basicEntityVersion}")
-    compile("pl.java.scalatech:serviceCommon:${serviceCommonVersion}")
+    compile("pl.java.scalatech:commonService:${serviceCommonVersion}")
  
     testCompile("org.hamcrest:hamcrest-all:$hamcrestVersion")
     compile("org.mockito:mockito-all:$mockitoVersion")
