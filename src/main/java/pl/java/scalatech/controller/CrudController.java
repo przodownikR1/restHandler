@@ -3,7 +3,6 @@ package pl.java.scalatech.controller;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.Locale;
 import java.util.Map;
@@ -39,18 +38,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-
-import pl.java.scalatech.service.common.PaginationService;
-
 import pl.java.scalatech.entity.common.PKNature;
+import pl.java.scalatech.service.common.PaginationService;
 
 import com.google.common.base.Preconditions;
 
 @RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 @Slf4j
-public abstract class CrudController<T extends PKNature<K>, K extends Serializable> {
+public abstract class CrudController<T extends PKNature> {
 
-    protected final PaginationService<T, K> service;
+    protected final PaginationService<T> service;
 
     @Autowired
     protected MessageSource messageSource;
@@ -60,7 +57,7 @@ public abstract class CrudController<T extends PKNature<K>, K extends Serializab
 
     protected Locale locale = Locale.getDefault();
 
-    public CrudController(PaginationService<T, K> paginationService) {
+    public CrudController(PaginationService<T> paginationService) {
         this.service = paginationService;
 
     }
@@ -72,7 +69,7 @@ public abstract class CrudController<T extends PKNature<K>, K extends Serializab
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> getResourceById(@PathVariable("id") K id, @MatrixVariable Optional<Map<String, String>> maps) {
+    public ResponseEntity<?> getResourceById(@PathVariable("id") Long id, @MatrixVariable Optional<Map<String, String>> maps) {
         log.info("+++  getResourceById {}", id);
         T item = service.findById(id);
         //if(maps.isPresent()){
@@ -95,7 +92,7 @@ public abstract class CrudController<T extends PKNature<K>, K extends Serializab
     }
 
     @RequestMapping(value = "/{id:\\d+}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteCategoryById(@PathVariable("id") K id) {
+    public ResponseEntity<Void> deleteCategoryById(@PathVariable("id") Long id) {
         T loadedT = service.findById(id);
         loadedT = Preconditions.checkNotNull(loadedT);
         service.delete(loadedT);
@@ -104,7 +101,7 @@ public abstract class CrudController<T extends PKNature<K>, K extends Serializab
     }
 
     @RequestMapping(value = "/{id:\\d+}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateResource(@PathVariable K id, @RequestBody @Valid final T resource) {
+    public ResponseEntity<?> updateResource(@PathVariable Long id, @RequestBody @Valid final T resource) {
         T loadedT = service.findById(id);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(linkTo(methodOn(getClass()).getResourceById(id, null)).toUri());
